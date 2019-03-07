@@ -3,7 +3,6 @@ function onScanButtonClick() {
         filters: [
             {name: 'CC2650 SensorTag'}
         ],
-        //acceptAllDevices: true,
         optionalServices: ['f000aa00-0451-4000-b000-000000000000', '0000180a-0000-1000-8000-00805f9b34fb']
     };
 
@@ -16,25 +15,6 @@ function onScanButtonClick() {
             return server.getPrimaryService('0000180a-0000-1000-8000-00805f9b34fb');
         })
         .then(service => {
-            // console.log('Enable Temperature scanning');
-            // service.getCharacteristic('f000aa02-0451-4000-b000-000000000000').then(charConfig => {
-            //     var value = new Uint8Array([0x01]);
-            //     charConfig.writeValue(value);
-            // })
-            // .catch(error => {
-            //     console.trace('Error: ' + error)
-            // });
-
-            // console.log('Retrieve Temperature Data');
-            // service.getCharacteristic('f000aa01-0451-4000-b000-000000000000')
-            // .then(charData => {
-            //     charData.startNotifications().then(_ => {
-            //         charData.addEventListener('characteristicvaluechanged', handleTempChange);
-            //     })
-            // })
-            // .catch(error => {
-            //     console.trace('Error: ' + error)
-            // });
             return service.getCharacteristic('00002a24-0000-1000-8000-00805f9b34fb');
         })
         .then(char => {
@@ -55,7 +35,6 @@ function onScanButtonClick() {
 
 function handleTempChange(event) {
     let raw_data = event.target.value;
-    //console.log(raw_data);
 
     let temp1 = raw_data.getUint8(3).toString(16);
     temp1 = temp1.length < 2 ? '0' + temp1 : temp1;
