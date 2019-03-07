@@ -28,9 +28,6 @@ function onScanButtonClick() {
                 charData.startNotifications().then(_ => {
                     charData.addEventListener('characteristicvaluechanged', handleTempChange);
                 })
-                .catch(error => {
-                    console.trace('Error: ' + error)
-                });
             })
             .catch(error => {
                 console.trace('Error: ' + error)
