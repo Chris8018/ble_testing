@@ -17,15 +17,18 @@ function onScanButtonClick() {
             service.getCharacteristic('f000aa02-0451-4000-b000-000000000000').then(charConfig => {
                 var value = new Uint8Array([0x01]);
                 charConfig.writeValue(value);
-            });
+            })
+            .done();
 
             console.log('Retrieve Temperature Data');
             service.getCharacteristic('f000aa01-0451-4000-b000-000000000000')
             .then(charData => {
                 charData.startNotifications().then(_ => {
                     charData.addEventListener('characteristicvaluechanged', handleTempChange);
-                });
-            });
+                })
+                .done();
+            })
+            .done();
         })
         .catch(error => {
             console.log('Argh! ' + error);
