@@ -39,21 +39,21 @@ function onScanButtonClick() {
         .catch(error => {
             console.trace('Error: ' + error);
         });
+}
 
-        function handleTempChange(event) {
-            let raw_data = event.target.value;
-            //console.log(raw_data);
-    
-            let temp1 = raw_data.getUint8(3).toString(16);
-            temp1 = temp1.length < 2 ? '0' + temp1 : temp1;
-    
-            let temp2 = raw_data.getUint8(2).toString(16);
-            temp2 = temp2.length < 2 ? '0' + temp2 : temp2;
-    
-            let raw_ambient_temp = parseInt('0x' + temp1 + temp2, 16);
-            let ambient_temp_int = raw_ambient_temp >> 2 & 0x3FFF;
-            let resultC = ambient_temp_int * 0.03125;
+function handleTempChange(event) {
+    let raw_data = event.target.value;
+    //console.log(raw_data);
 
-            console.log('Temperature: ' + resultC);
-        }
+    let temp1 = raw_data.getUint8(3).toString(16);
+    temp1 = temp1.length < 2 ? '0' + temp1 : temp1;
+
+    let temp2 = raw_data.getUint8(2).toString(16);
+    temp2 = temp2.length < 2 ? '0' + temp2 : temp2;
+
+    let raw_ambient_temp = parseInt('0x' + temp1 + temp2, 16);
+    let ambient_temp_int = raw_ambient_temp >> 2 & 0x3FFF;
+    let resultC = ambient_temp_int * 0.03125;
+
+    console.log('Temperature: ' + resultC);
 }
