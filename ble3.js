@@ -18,7 +18,9 @@ function onScanButtonClick() {
                 var value = new Uint8Array([0x01]);
                 charConfig.writeValue(value);
             })
-            .done();
+            .catch(error => {
+                console.log('Error: ' + error)
+            });
 
             console.log('Retrieve Temperature Data');
             service.getCharacteristic('f000aa01-0451-4000-b000-000000000000')
@@ -26,12 +28,16 @@ function onScanButtonClick() {
                 charData.startNotifications().then(_ => {
                     charData.addEventListener('characteristicvaluechanged', handleTempChange);
                 })
-                .done();
+                .catch(error => {
+                    console.log('Error: ' + error)
+                });
             })
-            .done();
+            .catch(error => {
+                console.log('Error: ' + error)
+            });
         })
         .catch(error => {
-            console.log('Argh! ' + error);
+            console.log('Error: ' + error);
         });
 
         function handleTempChange(event) {
