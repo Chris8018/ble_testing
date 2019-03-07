@@ -19,7 +19,7 @@ function onScanButtonClick() {
                 charConfig.writeValue(value);
             })
             .catch(error => {
-                console.log('Error: ' + error)
+                console.trace('Error: ' + error)
             });
 
             console.log('Retrieve Temperature Data');
@@ -29,15 +29,15 @@ function onScanButtonClick() {
                     charData.addEventListener('characteristicvaluechanged', handleTempChange);
                 })
                 .catch(error => {
-                    console.log('Error: ' + error)
+                    console.trace('Error: ' + error)
                 });
             })
             .catch(error => {
-                console.log('Error: ' + error)
+                console.trace('Error: ' + error)
             });
         })
         .catch(error => {
-            console.log('Error: ' + error);
+            console.trace('Error: ' + error);
         });
 
         function handleTempChange(event) {
