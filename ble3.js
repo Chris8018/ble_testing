@@ -12,20 +12,36 @@ function onScanButtonClick() {
         })
         .then(server => {
             console.log('Try to get services')
-            return server.getPrimaryService('0000180a-0000-1000-8000-00805f9b34fb');
+            // return server.getPrimaryService('0000180a-0000-1000-8000-00805f9b34fb');
+            return server.getPrimaryService('f000aa00-0451-4000-b000-000000000000');
+            
         })
         .then(service => {
-            service.getCharacteristic('00002a24-0000-1000-8000-00805f9b34fb')
-            .then(char => {
-                return char.readValue();
-            })
-            .then(values => {
-                let temp = '';
-                for (var i = 0; i < 16; i++) {
-                    temp += String.fromCharCode(values.getUint8(i));
-                }
-                console.log(temp);
-            })
+            // service.getCharacteristic('00002a24-0000-1000-8000-00805f9b34fb')
+            // .then(char => {
+            //     return char.readValue();
+            // })
+            // .then(values => {
+            //     let temp = '';
+            //     for (var i = 0; i < 16; i++) {
+            //         temp += String.fromCharCode(values.getUint8(i));
+            //     }
+            //     console.log(temp);
+            // })
+
+            console.log('Enable Temperature scanning');
+            service.getCharacteristic('f000aa02-0451-4000-b000-000000000000').then(charConfig => {
+                var value = new Uint8Array([0x01]);
+                charConfig.writeValue(value);
+            });
+
+            console.log('Retrieve Temperature Data');
+            service.getCharacteristic('f000aa01-0451-4000-b000-000000000000')
+            .then(charData => {
+                charData.startNotifications().then(_ => {
+                    charData.addEventListener('characteristicvaluechanged', self.handleTempChange);
+                });
+            });
         })
         // .then(char => {
         //     return char.readValue();
