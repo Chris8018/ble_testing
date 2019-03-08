@@ -15,18 +15,28 @@ function onScanButtonClick() {
             return server.getPrimaryService('0000180a-0000-1000-8000-00805f9b34fb');
         })
         .then(service => {
-            return service.getCharacteristic('00002a24-0000-1000-8000-00805f9b34fb');
+            service.getCharacteristic('00002a24-0000-1000-8000-00805f9b34fb')
+            .then(char => {
+                return char.readValue();
+            })
+            .then(values => {
+                let temp = '';
+                for (var i = 0; i < 16; i++) {
+                    temp += String.fromCharCode(values.getUint8(i));
+                }
+                console.log(temp);
+            })
         })
-        .then(char => {
-            return char.readValue();
-        })
-        .then(values => {
-            let temp = '';
-            for (var i = 0; i < 16; i++) {
-                temp += String.fromCharCode(values.getUint8(i));
-            }
-            console.log(temp);
-        })
+        // .then(char => {
+        //     return char.readValue();
+        // })
+        // .then(values => {
+        //     let temp = '';
+        //     for (var i = 0; i < 16; i++) {
+        //         temp += String.fromCharCode(values.getUint8(i));
+        //     }
+        //     console.log(temp);
+        // })
         .catch(error => {
             console.trace('Error: ' + error);
         });
