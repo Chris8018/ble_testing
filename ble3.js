@@ -1,3 +1,7 @@
+var bDevice;
+var vServer;
+var bService;
+
 function onScanButtonClick() {
     let options = {
         filters: [
@@ -8,15 +12,18 @@ function onScanButtonClick() {
 
     navigator.bluetooth.requestDevice(options)
         .then(device => {
+            bDevice = device;
             return device.gatt.connect();
         })
         .then(server => {
+            bService = server;
             console.log('Try to get services')
             // return server.getPrimaryService('0000180a-0000-1000-8000-00805f9b34fb');
             return server.getPrimaryService('f000aa00-0451-4000-b000-000000000000');
             
         })
         .then(service => {
+            bService = service;
             // service.getCharacteristic('00002a24-0000-1000-8000-00805f9b34fb')
             // .then(char => {
             //     return char.readValue();
@@ -29,18 +36,32 @@ function onScanButtonClick() {
             //     console.log(temp);
             // })
 
-            console.log('Enable Temperature scanning');
-            service.getCharacteristic('f000aa02-0451-4000-b000-000000000000').then(charConfig => {
-                var value = new Uint8Array([0x01]);
-                charConfig.writeValue(value);
-            });
+            // console.log('Enable Temperature scanning');
+            // service.getCharacteristic('f000aa02-0451-4000-b000-000000000000')
+            // .then(charConfig => {
+            //     var value = new Uint8Array([0x01]);
+            //     charConfig.writeValue(value);
+            // });
 
-            console.log('Retrieve Temperature Data');
-            service.getCharacteristic('f000aa01-0451-4000-b000-000000000000')
-            .then(charData => {
-                charData.startNotifications().then(_ => {
-                    charData.addEventListener('characteristicvaluechanged', self.handleTempChange);
-                });
+            // console.log('Retrieve Temperature Data');
+            // service.getCharacteristic('f000aa01-0451-4000-b000-000000000000')
+            // .then(charData => {
+            //     charData.startNotifications().then(_ => {
+            //         charData.addEventListener('characteristicvaluechanged', self.handleTempChange);
+            //     });
+            // });
+            return bService.getCharacteristic('f000aa02-0451-4000-b000-000000000000');
+        })
+        .then(charConfig => {
+            var value = new Uint8Array([0x01]);
+            return charConfig.writeValue(value);
+        })
+        .then(_ => {
+            return bService.getCharacteristic('f000aa01-0451-4000-b000-000000000000');
+        })
+        .then(charData => {
+            charData.startNotifications().then(_ => {
+                charData.addEventListener('characteristicvaluechanged', self.handleTempChange);
             });
         })
         // .then(char => {
